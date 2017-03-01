@@ -76,7 +76,7 @@ namespace CutenessOverload
 
             superdog = new Sprite(new Vector2(1, 325), // Start at x=-150, y=30
                                   superDogSheet, 
-                                  new Rectangle(155, 236, 419, 394), // Use this part of the superdog texture
+                                  new Rectangle(155, 236, 390, 360), // Use this part of the superdog texture
                                   new Vector2(20,0));
             superdog2 = new Sprite(new Vector2(130, 1), // Start at x=-150, y=30
                                superDogSheet,
@@ -87,10 +87,10 @@ namespace CutenessOverload
                               new Rectangle(164, 0, 163, 147), // Use this part of the superdog texture
                               new Vector2(60, 20));
 
-            superdog4 = new Sprite(new Vector2(50, 1), // Start at x=-150, y=30
+            superdog4 = new Sprite(new Vector2(-10, 325), // Start at x=-150, y=30
                               superDogSheet,
-                              new Rectangle(164, 0, 163, 147), // Use this part of the superdog texture
-                              new Vector2(60, 20));
+                              new Rectangle(0, 0, 0, 0), // Use this part of the superdog texture
+                              new Vector2(20,0));
             superdog5 = new Sprite(new Vector2(600, this.Window.ClientBounds.Height+147), // Start at x=-150, y=30
                               superDogSheet,
                               new Rectangle(0, 0, 123, 147), // Use this part of the superdog texture
@@ -196,10 +196,11 @@ namespace CutenessOverload
                // Draw the superdog!
                 superdog2.Draw(spriteBatch);
                 superdog3.Draw(spriteBatch);
-                superdog4.Draw(spriteBatch);
+               
             }
             superdog5.Draw(spriteBatch);
             superdog.Draw(spriteBatch);
+            superdog4.Draw(spriteBatch);
             spriteBatch.End();
 
             EffectManager.Draw();
