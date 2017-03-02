@@ -18,10 +18,13 @@ namespace CutenessOverload
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SoundEffect sfxExplode;
         double timer = 0;
         double explodeCooldown = 0;
         double explodeCooldownTime = 0.25;
         Boolean planesExploded = false;
+        Boolean explosionPlayed = false;
+ 
 
         // Define all the variables you want to use here
 
@@ -64,6 +67,8 @@ namespace CutenessOverload
 
             EffectManager.Initialize(graphics, Content);
             EffectManager.LoadContent();
+
+            sfxExplode = Content.Load<SoundEffect>("explode");
            
 
             // TODO: use this.Content to load your game content here
@@ -74,23 +79,23 @@ namespace CutenessOverload
 
             superDogSheet = Content.Load<Texture2D>("superdog");
 
-            superdog = new Sprite(new Vector2(1, 325), // Start at x=-150, y=30
+            superdog = new Sprite(new Vector2(-275, 325), // Start at x=-150, y=30
                                   superDogSheet, 
-                                  new Rectangle(155, 236, 390, 360), // Use this part of the superdog texture
-                                  new Vector2(20,0));
-            superdog2 = new Sprite(new Vector2(130, 1), // Start at x=-150, y=30
+                                  new Rectangle(150, 230, 274, 176), // Use this part of the superdog texture
+                                  new Vector2(0,0));
+            superdog2 = new Sprite(new Vector2(1, 1), // Start at x=-150, y=30
                                superDogSheet,
                                new Rectangle(164, 0, 163, 147), // Use this part of the superdog texture
-                               new Vector2(60, 20));
-            superdog3 = new Sprite(new Vector2(90, 1), // Start at x=-150, y=30
+                               new Vector2(67.28f, 20));
+            superdog3 = new Sprite(new Vector2(-20, 1), // Start at x=-150, y=30
                               superDogSheet,
                               new Rectangle(164, 0, 163, 147), // Use this part of the superdog texture
-                              new Vector2(60, 20));
+                              new Vector2(67.28f, 20));
 
-            superdog4 = new Sprite(new Vector2(-10, 325), // Start at x=-150, y=30
+            superdog4 = new Sprite(new Vector2(-300, 0), // Start at x=-150, y=30
                               superDogSheet,
-                              new Rectangle(0, 0, 0, 0), // Use this part of the superdog texture
-                              new Vector2(20,0));
+                              new Rectangle(457, 55, 297, 350), // Use this part of the superdog texture
+                              new Vector2(0,0));
             superdog5 = new Sprite(new Vector2(600, this.Window.ClientBounds.Height+147), // Start at x=-150, y=30
                               superDogSheet,
                               new Rectangle(0, 0, 123, 147), // Use this part of the superdog texture
@@ -118,15 +123,38 @@ namespace CutenessOverload
         {
             timer += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (timer > 5)
+            if (!explosionPlayed)
             {
-                superdog5.Velocity = new Vector2(0, -60);
-
-                if (superdog5.Location.Y < this.Window.ClientBounds.Height - superdog5.BoundingBoxRect.Height)
-                    superdog5.Velocity = new Vector2(0, 0);
+                sfxExplode.Play();
+                explosionPlayed = true;
             }
 
-            if (timer > 5 && timer < 10)
+            if (timer > 5)
+            {
+                superdog.Velocity = new Vector2(150, 0);
+
+                if (timer < 8)
+                {
+                    superdog5.Velocity = new Vector2(0, -120);
+
+                    if (superdog5.Location.Y < this.Window.ClientBounds.Height - superdog5.BoundingBoxRect.Height)
+                        superdog5.Velocity = new Vector2(0, 0);
+                }
+
+                superdog4.Velocity = new Vector2(40, 0);
+                if (superdog4.Location.X > 10)
+                    superdog4.Velocity = Vector2.Zero;
+
+            }
+
+            if (timer > 9.3)
+            {
+                superdog5.Velocity += new Vector2(5, -2);
+                superdog5.Rotation += 0.01f;
+            }
+
+
+            if (timer > 6 && timer < 9)
             {
                 explodeCooldown -= gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -149,7 +177,7 @@ namespace CutenessOverload
 
                     if (!planesExploded)
                     {
-                        
+                           
                         EffectManager.Effect("BasicExplosionWithTrails2").Trigger(superdog2.Center);
                         EffectManager.Effect("BasicExplosionWithHalo").Trigger(superdog3.Center);
                         EffectManager.Effect("ShipSmokeTrail").Trigger(superdog4.Center);
